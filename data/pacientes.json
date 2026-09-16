@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "nombre": "Guido",
+    "apellido": "Gattas",
+    "rol":"paciente"
+  },
+  {
+    "id": 2,
+    "nombre": "Belén",
+    "apellido": "Gatto",
+    "rol":"paciente"
+  },
+  {
+    "id": 3,
+    "nombre": "Lucas",
+    "apellido": "Katz",
+    "rol":"paciente"
+  },
+  {
+    "id": 4,
+    "nombre": "Gonzalo",
+    "apellido": "Santini",
+    "rol":"paciente"
+  }
+]

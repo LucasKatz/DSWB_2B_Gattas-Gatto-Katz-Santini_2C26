@@ -1,0 +1,14 @@
+html
+  head
+    title Ingreso de Usuario
+  body
+    h1 Buscar Usuario por ID
+    form(action="/respuesta" method="POST")
+      label Tipo:
+      select(name="tipo")
+        option(value="pacientes") Paciente
+        option(value="doctores") Doctor
+        option(value="admins") Administrativo
+      br
+      input(type="number" name="id" placeholder="Ingresa el ID" required)
+      button(type="submit") Enviar

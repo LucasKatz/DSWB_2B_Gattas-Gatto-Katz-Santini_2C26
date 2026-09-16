@@ -1,0 +1,12 @@
+html
+  head
+    title Respuesta
+  body
+    h1 ¡Hola #{usuario.nombre} #{usuario.apellido}!
+    p Tu ID es: #{usuario.id}
+    p Tu Rol es: #{usuario.rol}
+    
+    if usuario.especialidad
+      p Tu Especialidad es: #{usuario.especialidad}
+
+    p Gracias por consultar la información.
