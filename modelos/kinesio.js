@@ -1,4 +1,4 @@
-class Doctor {
+class Kinesiologo {
     constructor(id, nombre, apellido, especialidad, rol) {
         this.id = id;
         this.nombre = nombre;
@@ -8,4 +8,4 @@ class Doctor {
     }
 }
 
-module.exports = Doctor;
+module.exports = Kinesiologo;

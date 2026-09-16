@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 const pacientesRoutes = require("./rutas/pacientesRoutes");
-const doctoresRoutes = require("./rutas/doctoresRoutes");
+const kinesiosRoutes = require("./rutas/kinesiosRoutes");
 const adminsRoutes = require("./rutas/adminsRoutes");
 
 const app = express();
@@ -48,7 +48,7 @@ app.post("/respuesta", (req, res) => {
 
 // Rutas de las API REST (para probar endpoints en Thunder Client)
 app.use("/pacientes", pacientesRoutes);
-app.use("/doctores", doctoresRoutes);
+app.use("/kinesios", kinesiosRoutes);
 app.use("/admins", adminsRoutes);
 
 // Iniciar servidor

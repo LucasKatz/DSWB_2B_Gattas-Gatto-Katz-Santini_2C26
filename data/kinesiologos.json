@@ -5,126 +5,126 @@
     "nombre": "Juan",
     "apellido": "Perez",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologo"
   },
   {
     "id": 2,
     "nombre": "Maria",
     "apellido": "Gomez",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologo"
   },
   {
     "id": 3,
     "nombre": "Juana",
     "apellido": "Pereira",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologo"
   },
   {
     "id": 4,
     "nombre": "Carlos",
     "apellido": "Rodriguez",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologo"
   },
   {
     "id": 5,
     "nombre": "Ana",
     "apellido": "Fernandez",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologa"
   },
   {
     "id": 6,
     "nombre": "Lucas",
     "apellido": "Lopez",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologo"
   },
   {
     "id": 7,
     "nombre": "Sofia",
     "apellido": "Diaz",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologa"
   },
   {
     "id": 8,
     "nombre": "Mateo",
     "apellido": "Martinez",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologo"
   },
   {
     "id": 9,
     "nombre": "Camila",
     "apellido": "Garcia",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologa"
   },
   {
     "id": 10,
     "nombre": "Santiago",
     "apellido": "Romero",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologo"
   },
   {
     "id": 11,
     "nombre": "Valentina",
     "apellido": "Alvarez",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologa"
   },
   {
     "id": 12,
     "nombre": "Joaquin",
     "apellido": "Torres",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologo"
   },
   {
     "id": 13,
     "nombre": "Lucia",
     "apellido": "Ruiz",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologa"
   },
   {
     "id": 14,
     "nombre": "Nicolas",
     "apellido": "Sosa",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologo"
   },
   {
     "id": 15,
     "nombre": "Martina",
     "apellido": "Benitez",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologa"
   },
   {
     "id": 16,
     "nombre": "Tomas",
     "apellido": "Acosta",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologo"
   },
   {
     "id": 17,
     "nombre": "Florencia",
     "apellido": "Medina",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologa"
   },
   {
     "id": 18,
     "nombre": "Gabriel",
     "apellido": "Herrera",
     "especialidad": "Kinesiologia",
-    "rol":"Doctor"
+    "rol":"Kinesiologo"
   }
 ]
 
