@@ -1,106 +1,92 @@
-const fs = require("fs");
-const path = require("path");
-
-const Kinesiologo = require("../modelos/kinesio");
-const rutaArchivo = path.join(__dirname, "../data/kinesiologos.json");
-
-// Función leer archivo
-const leerKinesiologos = () => {
-    const data = fs.readFileSync(rutaArchivo, "utf-8");
-    return JSON.parse(data);
-};
-
-// Función guardar archivo
-const guardarKinesiologos = (kinesiologos) => {
-    fs.writeFileSync(
-        rutaArchivo,
-        JSON.stringify(kinesiologos, null, 2)
-    );
-};
+const Kinesio = require("../modelos/kinesio");
 
 // GET ALL
-const obtenerKinesiologos = (req, res) => {
-    const kinesiologos = leerKinesiologos();
-    res.json(kinesiologos);
+const obtenerKinesiologos = async (req, res, next) => {
+    try {
+        const kinesiologos = await Kinesio.find();
+        res.json(kinesiologos);
+    } catch (error) {
+        next(error);
+    }
 };
 
 // GET BY ID
-const obtenerKinesiologoPorId = (req, res) => {
-    const kinesiologos = leerKinesiologos();
-    const id = parseInt(req.params.id);
+const obtenerKinesiologoPorId = async (req, res, next) => {
+    try {
+        const id = parseInt(req.params.id);
+        const kinesiologo = await Kinesio.findOne({ id });
 
-    const kinesiologo = kinesiologos.find(d => d.id === id);
+        if (!kinesiologo) {
+            return res.status(404).json({ mensaje: "Kinesiologo no encontrado" });
+        }
 
-    if (!kinesiologo) {
-        return res.status(404).json({
-            mensaje: "Kinesiologo no encontrado"
-        });
+        res.json(kinesiologo);
+    } catch (error) {
+        next(error);
     }
-
-    res.json(kinesiologo);
 };
 
 // CREATE
-const crearKinesiologo = (req, res) => {
-    const kinesiologos = leerKinesiologos();
-    const { id, nombre, apellido, especialidad } = req.body;
+const crearKinesiologo = async (req, res, next) => {
+    try {
+        const { id, nombre, apellido, especialidad, rol } = req.body;
 
-    const nuevoKinesiologo = new Kinesiologo(id, nombre, apellido, especialidad);
-    kinesiologos.push(nuevoKinesiologo);
+        const nuevoKinesiologo = await Kinesio.create({
+            id: parseInt(id),
+            nombre,
+            apellido,
+            especialidad,
+            rol: rol || "kinesiologo"
+        });
 
-    guardarKinesiologos(kinesiologos);
-
-    res.status(201).json({
-        mensaje: "Kinesiologo registrado",
-        kinesiologo: nuevoKinesiologo
-    });
+        res.status(201).json({
+            mensaje: "Kinesiologo registrado",
+            kinesiologo: nuevoKinesiologo
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
 // UPDATE
-const actualizarKinesiologo = (req, res) => {
-    const kinesiologos = leerKinesiologos();
-    const id = parseInt(req.params.id);
+const actualizarKinesiologo = async (req, res, next) => {
+    try {
+        const id = parseInt(req.params.id);
+        const { nombre, apellido, especialidad, rol } = req.body;
 
-    const kinesiologo = kinesiologos.find(d => d.id === id);
+        const kinesiologoActualizado = await Kinesio.findOneAndUpdate(
+            { id },
+            { nombre, apellido, especialidad, rol },
+            { new: true, runValidators: true }
+        );
 
-    if (!kinesiologo) {
-        return res.status(404).json({
-            mensaje: "Kinesiologo no encontrado"
+        if (!kinesiologoActualizado) {
+            return res.status(404).json({ mensaje: "Kinesiologo no encontrado" });
+        }
+
+        res.json({
+            mensaje: "Kinesiologo actualizado",
+            kinesiologo: kinesiologoActualizado
         });
+    } catch (error) {
+        next(error);
     }
-
-    const { nombre, apellido, especialidad } = req.body;
-
-    kinesiologo.nombre = nombre ?? kinesiologo.nombre;
-    kinesiologo.apellido = apellido ?? kinesiologo.apellido;
-    kinesiologo.especialidad = especialidad ?? kinesiologo.especialidad;
-
-    guardarKinesiologos(kinesiologos);
-
-    res.json({
-        mensaje: "Kinesiologo actualizado",
-        kinesiologo
-    });
 };
 
 // DELETE
-const eliminarKinesiologo = (req, res) => {
-    const kinesiologos = leerKinesiologos();
-    const id = parseInt(req.params.id);
+const eliminarKinesiologo = async (req, res, next) => {
+    try {
+        const id = parseInt(req.params.id);
+        const kinesiologoEliminado = await Kinesio.findOneAndDelete({ id });
 
-    const nuevosKinesiologos = kinesiologos.filter(d => d.id !== id);
+        if (!kinesiologoEliminado) {
+            return res.status(404).json({ mensaje: "Kinesiologo no encontrado" });
+        }
 
-    if (kinesiologos.length === nuevosKinesiologos.length) {
-        return res.status(404).json({
-            mensaje: "Kinesiologo no encontrado"
-        });
+        res.json({ mensaje: "Kinesiologo eliminado" });
+    } catch (error) {
+        next(error);
     }
-
-    guardarKinesiologos(nuevosKinesiologos);
-
-    res.json({
-        mensaje: "Kinesiologo eliminado"
-    });
 };
 
 module.exports = {

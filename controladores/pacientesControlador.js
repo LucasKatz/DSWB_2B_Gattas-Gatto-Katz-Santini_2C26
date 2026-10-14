@@ -1,148 +1,97 @@
-const fs = require("fs");
-const path = require("path");
-
 const Paciente = require("../modelos/paciente");
 
-const rutaArchivo = path.join(__dirname, "../data/pacientes.json");
-
-
-// función leer archivo
-const leerPacientes = () => {
-    const data = fs.readFileSync(rutaArchivo, "utf-8");
-
-    return JSON.parse(data);
-
-};
-
-
-// función guardar archivo
-const guardarPacientes = (pacientes) => {
-
-    fs.writeFileSync(
-        rutaArchivo,
-        JSON.stringify(pacientes, null, 2)
-    );
-
-};
-
-
 // GET ALL
-const obtenerPacientes = (req, res) => {
-
-    const pacientes = leerPacientes();
-
-    res.json(pacientes);
-
+const obtenerPacientes = async (req, res, next) => {
+    try {
+        const pacientes = await Paciente.find();
+        res.json(pacientes);
+    } catch (error) {
+        next(error);
+    }
 };
-
 
 // GET BY ID
-const obtenerPacientePorId = (req, res) => {
+const obtenerPacientePorId = async (req, res, next) => {
+    try {
+        const id = parseInt(req.params.id);
+        const paciente = await Paciente.findOne({ id });
 
-    const pacientes = leerPacientes();
+        if (!paciente) {
+            return res.status(404).json({ mensaje: "Paciente no encontrado" });
+        }
 
-    const id = parseInt(req.params.id);
-
-    const paciente = pacientes.find(p => p.id === id);
-
-    if (!paciente) {
-
-        return res.status(404).json({
-            mensaje: "Paciente no encontrado"
-        });
-
+        res.json(paciente);
+    } catch (error) {
+        next(error);
     }
-
-    res.json(paciente);
-
 };
-
 
 // CREATE
-const crearPaciente = (req, res) => {
+const crearPaciente = async (req, res, next) => {
+    try {
+        const { id, nombre, apellido, rol } = req.body;
 
-    const pacientes = leerPacientes();
+        const nuevoPaciente = await Paciente.create({
+            id: parseInt(id),
+            nombre,
+            apellido,
+            rol: rol || "paciente"
+        });
 
-    const { id, nombre, apellido } = req.body;
-
-    const nuevoPaciente = new Persona(id, nombre, apellido);
-
-    personas.push(nuevoPaciente);
-
-    guardarPersonas(pacientes);
-
-    res.status(201).json({
-        mensaje: "Paciente Registrado",
-        paciente: nuevoPaciente
-    });
-
+        res.status(201).json({
+            mensaje: "Paciente registrado",
+            paciente: nuevoPaciente
+        });
+    } catch (error) {
+        next(error);
+    }
 };
-
 
 // UPDATE
-const actualizarPaciente = (req, res) => {
+const actualizarPaciente = async (req, res, next) => {
+    try {
+        const id = parseInt(req.params.id);
+        const { nombre, apellido, rol } = req.body;
 
-    const personas = leerPersonas();
+        const pacienteActualizado = await Paciente.findOneAndUpdate(
+            { id },
+            { nombre, apellido, rol },
+            { new: true, runValidators: true } // Returna el objeto actualizado y ejecuta las validaciones
+        );
 
-    const id = parseInt(req.params.id);
+        if (!pacienteActualizado) {
+            return res.status(404).json({ mensaje: "Paciente no encontrado" });
+        }
 
-    const persona = personas.find(p => p.id === id);
-
-    if (!persona) {
-
-        return res.status(404).json({
-            mensaje: "Persona no encontrada"
+        res.json({
+            mensaje: "Paciente actualizado",
+            paciente: pacienteActualizado
         });
-
+    } catch (error) {
+        next(error);
     }
-
-    const { nombre, apellido } = req.body;
-
-    persona.nombre = nombre ?? persona.nombre;
-    persona.apellido = apellido ?? persona.apellido;
-
-    guardarPersonas(personas);
-
-    res.json({
-        mensaje: "Persona actualizada",
-        persona
-    });
-
 };
-
 
 // DELETE
-const eliminarPaciente = (req, res) => {
+const eliminarPaciente = async (req, res, next) => {
+    try {
+        const id = parseInt(req.params.id);
+        const pacienteEliminado = await Paciente.findOneAndDelete({ id });
 
-    const personas = leerPersonas();
+        if (!pacienteEliminado) {
+            return res.status(404).json({ mensaje: "Paciente no encontrado" });
+        }
 
-    const id = parseInt(req.params.id);
-
-    const nuevasPersonas = personas.filter(p => p.id !== id);
-
-    if (personas.length === nuevasPersonas.length) {
-
-        return res.status(404).json({
-            mensaje: "Persona no encontrada"
-        });
-
+        res.json({ mensaje: "Paciente eliminado" });
+    } catch (error) {
+        next(error);
     }
-
-    guardarPacientes(nuevosPacientes);
-
-    res.json({
-        mensaje: "Paciente eliminado"
-    });
-
 };
 
-
 module.exports = {
-
     obtenerPacientes,
     obtenerPacientePorId,
     crearPaciente,
     actualizarPaciente,
     eliminarPaciente
-
 };

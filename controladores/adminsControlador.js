@@ -1,106 +1,91 @@
-const fs = require("fs");
-const path = require("path");
-
-const Admins = require("../modelos/admins");
-const rutaArchivo = path.join(__dirname, "../data/admins.json");
-
-// Función leer archivo
-const leerAdmins = () => {
-    const data = fs.readFileSync(rutaArchivo, "utf-8");
-    return JSON.parse(data);
-};
-
-// Función guardar archivo
-const guardarAdmins = (admins) => {
-    fs.writeFileSync(
-        rutaArchivo,
-        JSON.stringify(admins, null, 2)
-    );
-};
+const Admin = require("../modelos/admins");
 
 // GET ALL
-const obtenerAdmins = (req, res) => {
-    const admins = leerAdmins();
-    res.json(admins);
+const obtenerAdmins = async (req, res, next) => {
+    try {
+        const admins = await Admin.find();
+        res.json(admins);
+    } catch (error) {
+        next(error);
+    }
 };
 
+// GET BY ID
+const obtenerAdminPorId = async (req, res, next) => {
+    try {
+        const id = parseInt(req.params.id);
+        const admin = await Admin.findOne({ id });
 
-const obtenerAdminPorId = (req, res) => {
-    const admins = leerAdmins();
-    const id = parseInt(req.params.id);
+        if (!admin) {
+            return res.status(404).json({ mensaje: "Administrador no encontrado" });
+        }
 
-    const admin = admins.find(d => d.id === id);
-
-    if (!admin) {
-        return res.status(404).json({
-            mensaje: "Administrador no encontrado"
-        });
+        res.json(admin);
+    } catch (error) {
+        next(error);
     }
-
-    res.json(admin);
 };
 
 // CREATE
-const crearAdmin = (req, res) => {
-    const admins = leerDoctores();
-    const { id, nombre, apellido, rol } = req.body;
+const crearAdmin = async (req, res, next) => {
+    try {
+        const { id, nombre, apellido, rol } = req.body;
 
-    const nuevoAdmin = new Doctor(id, nombre, apellido, rol);
-    doctores.push(nuevoAdmin);
+        const nuevoAdmin = await Admin.create({
+            id: parseInt(id),
+            nombre,
+            apellido,
+            rol: rol || "admin"
+        });
 
-    guardarDoctores(admins);
-
-    res.status(201).json({
-        mensaje: "Administrador registrado",
-        admin: nuevoAdmin
-    });
+        res.status(201).json({
+            mensaje: "Administrador registrado",
+            admin: nuevoAdmin
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
 // UPDATE
-const actualizarAdmin = (req, res) => {
-    const admins = leerAdmins();
-    const id = parseInt(req.params.id);
+const actualizarAdmin = async (req, res, next) => {
+    try {
+        const id = parseInt(req.params.id);
+        const { nombre, apellido, rol } = req.body;
 
-    const admin = admins.find(d => d.id === id);
+        const adminActualizado = await Admin.findOneAndUpdate(
+            { id },
+            { nombre, apellido, rol },
+            { new: true, runValidators: true }
+        );
 
-    if (!admin) {
-        return res.status(404).json({
-            mensaje: "Administrador no encontrado"
+        if (!adminActualizado) {
+            return res.status(404).json({ mensaje: "Administrador no encontrado" });
+        }
+
+        res.json({
+            mensaje: "Administrador actualizado",
+            admin: adminActualizado
         });
+    } catch (error) {
+        next(error);
     }
-
-    const { nombre, apellido, rol } = req.body;
-
-    admin.nombre = nombre ?? admin.nombre;
-    admin.apellido = apellido ?? admin.apellido;
-    admin.rol = rol ?? admin.rol;
-
-    guardarAdmins(admins);
-
-    res.json({
-        mensaje: "Administrador actualizado",
-        admin
-    });
 };
 
 // DELETE
-const eliminarAdmin = (req, res) => {
-    const admins = leerAdmins();
-    const id = parseInt(req.params.id);
+const eliminarAdmin = async (req, res, next) => {
+    try {
+        const id = parseInt(req.params.id);
+        const adminEliminado = await Admin.findOneAndDelete({ id });
 
-    const nuevosAdmins = admins.filter(d => d.id !== id);
+        if (!adminEliminado) {
+            return res.status(404).json({ mensaje: "Administrador no encontrado" });
+        }
 
-    if (admins.length === nuevosAdmins.length) {
-        return res.status(404).json({
-            mensaje: "Administrador no encontrado"
-        });
+        res.json({ mensaje: "Administrador eliminado" });
+    } catch (error) {
+        next(error);
     }
-
-    guardarAdmins(nuevosAdmins);
-
-    res.json({
-        mensaje: "Administrador eliminado"
-    });
 };
 
 module.exports = {
