@@ -3,12 +3,13 @@ const conectarDB = require("./config/db");
 
 // Modelos para la consulta del formulario Pug
 const Paciente = require("./modelos/paciente");
-const Kinesio = require("./modelos/kinesio"); // Asegúrate de tener este modelo creado
-const Admin = require("./modelos/admins");     // Asegúrate de tener este modelo creado
+const Kinesio = require("./modelos/kinesio");
+const Admin = require("./modelos/admins");
 
 const pacientesRoutes = require("./rutas/pacientesRoutes");
 const kinesiosRoutes = require("./rutas/kinesiosRoutes");
 const adminsRoutes = require("./rutas/adminsRoutes");
+const authRoutes = require("./rutas/authRoutes"); 
 const errorHandler = require("./middlewares/errorHandler");
 
 const app = express();
@@ -58,12 +59,15 @@ app.post("/respuesta", async (req, res, next) => {
     }
 });
 
+// 3. Rutas de autenticación (Login / Registro)
+app.use("/", authRoutes); 
+
 // Rutas API REST
 app.use("/pacientes", pacientesRoutes);
 app.use("/kinesios", kinesiosRoutes);
 app.use("/admins", adminsRoutes);
 
-// Middleware de gestión de errores (siempre al final de las rutas)
+// Middleware de gestión de errores 
 app.use(errorHandler);
 
 app.listen(PORT, () => {
