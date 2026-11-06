@@ -10,8 +10,6 @@ export default function DashboardAdminPage() {
   const [usuario, setUsuario] = useState(null);
   const router = useRouter();
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userStored = localStorage.getItem("usuario");
@@ -54,7 +52,7 @@ export default function DashboardAdminPage() {
     };
 
     obtenerDatos();
-  }, [router, API_URL]);
+  }, [router]);
 
   const cerrarSesion = () => {
     localStorage.removeItem("token");

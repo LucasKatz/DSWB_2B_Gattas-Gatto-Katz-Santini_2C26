@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const usuarioSchema = new mongoose.Schema({
     nombre: { type: String, required: true },
@@ -24,4 +24,4 @@ usuarioSchema.methods.validarPassword = async function (passwordIngresada) {
     return await bcrypt.compare(passwordIngresada, this.password);
 };
 
-module.exports = mongoose.model("Usuario", usuarioSchema);
+export default mongoose.models.Usuario || mongoose.model("Usuario", usuarioSchema);

@@ -8,8 +8,6 @@ export default function LoginPage() {
   const [error, setError] = useState(null);
   const router = useRouter();
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(null);

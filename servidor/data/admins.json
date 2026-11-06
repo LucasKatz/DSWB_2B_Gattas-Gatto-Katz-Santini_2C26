@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "nombre": "Agustin",
+    "apellido": "Castillo",
+    "rol": "Administrativo"
+  },
+  {
+    "id": 2,
+    "nombre": "Mariana",
+    "apellido": "Suarez",
+    "rol": "Administrativo"
+  },
+  {
+    "id": 3,
+    "nombre": "Diego",
+    "apellido": "Gimenez",
+    "rol": "Administrativo"
+  },
+  {
+    "id": 4,
+    "nombre": "Paula",
+    "apellido": "Castro",
+    "rol": "Administrativo"
+  },
+  {
+    "id": 5,
+    "nombre": "Gonzalo",
+    "apellido": "Molina",
+    "rol": "Administrativo"
+  },
+  {
+    "id": 6,
+    "nombre": "Victoria",
+    "apellido": "Ortiz",
+    "rol": "Administrativo"
+  },
+  {
+    "id": 7,
+    "nombre": "Emanuel",
+    "apellido": "Silva",
+    "rol": "Administrativo"
+  },
+  {
+    "id": 8,
+    "nombre": "Julieta",
+    "apellido": "Navarro",
+    "rol": "Administrativo"
+  },
+  {
+    "id": 9,
+    "nombre": "Facundo",
+    "apellido": "Rios",
+    "rol": "Administrativo"
+  },
+  {
+    "id": 10,
+    "nombre": "Delfina",
+    "apellido": "Mendoza",
+    "rol": "Administrativo"
+  }
+]

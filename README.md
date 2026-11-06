@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# KineVida – Sistema de Gestión Clínica
 
-## Getting Started
+Frontend en **Next.js 14 (App Router)** + API REST en **Express** + **MongoDB (Mongoose)**.
+Se despliega en **Vercel como un único proyecto**: Next.js sirve las páginas y la app
+Express atiende todas las rutas `/api/*`.
 
-First, run the development server:
+## Estructura
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+├── app/                      # Frontend (páginas de Next.js)
+│   ├── layout.js · page.js · globals.css · favicon.ico
+│   ├── login/page.js
+│   ├── registro/page.js
+│   └── dashboard/page.js
+├── pages/
+│   └── api/[[...ruta]].js    # Puente: entrega /api/* a la app Express
+├── servidor/                 # Backend Express (MVC)
+│   ├── app.js                # Crea y exporta la app Express
+│   ├── index.js              # Arranque local independiente (npm run api)
+│   ├── config/db.js          # Conexión a MongoDB (cacheada para serverless)
+│   ├── modelos/              # Esquemas Mongoose
+│   ├── controladores/        # Lógica de cada recurso
+│   ├── rutas/                # Routers de Express
+│   ├── middlewares/          # errorHandler, verificarToken
+│   └── data/                 # Datos de ejemplo (JSON)
+├── public/                   # Archivos estáticos
+├── next.config.mjs · tailwind.config.js · postcss.config.mjs · jsconfig.json
+├── vercel.json               # Fuerza el preset "Next.js" en Vercel
+└── .env.example              # Variables de entorno necesarias
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Endpoints
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+| Método | Ruta | Descripción |
+|---|---|---|
+| GET | `/api` | Verificación de la API |
+| POST | `/api/auth/registro` | Registro (paciente, kinesio o admin) |
+| POST | `/api/auth/login` | Inicio de sesión (devuelve JWT) |
+| GET/POST | `/api/pacientes` | Listar / crear pacientes |
+| GET/PUT/DELETE | `/api/pacientes/:id` | Ver / actualizar / eliminar paciente |
+| GET/POST | `/api/kinesios` | Listar / crear kinesiólogos |
+| GET/PUT/DELETE | `/api/kinesios/:id` | Ver / actualizar / eliminar kinesiólogo |
+| GET/POST | `/api/admins` | Listar / crear administradores |
+| GET/PUT/DELETE | `/api/admins/:id` | Ver / actualizar / eliminar administrador |
+| POST | `/api/respuesta` | Buscar usuario por tipo e id |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Desarrollo local
 
-## Learn More
+```bash
+npm install
+cp .env.example .env      # completar MONGO_URI y JWT_SECRET
+npm run dev               # http://localhost:3000 (frontend + API Express en /api)
+```
 
-To learn more about Next.js, take a look at the following resources:
+Para levantar solo la API Express (sin Next.js): `npm run api` → http://localhost:4000
+(requiere Node.js 20.6 o superior por el flag `--env-file`).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy en Vercel
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Subir el repositorio a GitHub e importarlo en Vercel (el preset debe quedar en **Next.js**).
+2. En *Settings → Environment Variables* cargar `MONGO_URI` y `JWT_SECRET`.
+3. En MongoDB Atlas, *Network Access*: permitir `0.0.0.0/0` (Vercel no tiene IP fija).
+4. Deploy. Las páginas y la API quedan en el mismo dominio.

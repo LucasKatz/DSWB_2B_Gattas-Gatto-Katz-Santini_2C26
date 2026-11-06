@@ -1,11 +1,6 @@
-// lib/db.js
+// servidor/config/db.js
+// Conexión a MongoDB con caché global, apta para entornos serverless (Vercel).
 import mongoose from "mongoose";
-
-const MONGO_URI = process.env.MONGO_URI;
-
-if (!MONGO_URI) {
-  throw new Error("Por favor define la variable MONGO_URI en el archivo .env.local");
-}
 
 let cached = global.mongoose;
 
@@ -16,6 +11,13 @@ if (!cached) {
 export async function conectarDB() {
   if (cached.conn) {
     return cached.conn;
+  }
+
+  // Se lee y valida al conectar (no al importar) para que el build de Vercel
+  // no falle si la variable todavía no está disponible en esa etapa.
+  const MONGO_URI = process.env.MONGO_URI;
+  if (!MONGO_URI) {
+    throw new Error("Por favor define la variable MONGO_URI (archivo .env o variables de entorno de Vercel)");
   }
 
   if (!cached.promise) {
@@ -38,3 +40,5 @@ export async function conectarDB() {
 
   return cached.conn;
 }
+
+export default conectarDB;
