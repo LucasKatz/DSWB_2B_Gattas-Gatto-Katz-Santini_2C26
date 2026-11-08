@@ -1,20 +1,16 @@
 import express from "express";
+import { verificarToken, permitirRoles, soloAdmin } from "../middlewares/authMiddelware.js";
+import { obtenerTodos, obtenerPorId, crear, actualizar, eliminar } from "../controladores/kinesiosControlador.js";
+
 const router = express.Router();
+const lectura = permitirRoles("admin", "kinesio");
 
-// IMPORTANTE: Los nombres deben coincidir con los export del controlador
-import {
-    obtenerKinesiologos,
-    obtenerKinesiologoPorId,
-    crearKinesiologo,
-    actualizarKinesiologo,
-    eliminarKinesiologo
-} from "../controladores/kinesiosControlador.js";
+router.use(verificarToken);
 
-// Rutas CRUD
-router.get("/", obtenerKinesiologos);
-router.get("/:id", obtenerKinesiologoPorId);
-router.post("/", crearKinesiologo);
-router.put("/:id", actualizarKinesiologo);
-router.delete("/:id", eliminarKinesiologo);
+router.get("/", lectura, obtenerTodos);
+router.get("/:id", lectura, obtenerPorId);
+router.post("/", soloAdmin, crear);
+router.put("/:id", soloAdmin, actualizar);
+router.delete("/:id", soloAdmin, eliminar);
 
 export default router;

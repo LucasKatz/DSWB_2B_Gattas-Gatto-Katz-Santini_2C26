@@ -1,60 +1,55 @@
 import jwt from "jsonwebtoken";
-
-// Importación de los modelos para enrutamiento por colección
 import Paciente from "../modelos/paciente.js";
 import Kinesio from "../modelos/kinesio.js";
 import Admin from "../modelos/admins.js";
+import { modelosPorRol, emailEnUso, texto } from "../utilidades/usuarios.js";
 
-// Registrar Usuario (POST /api/auth/registro)
 const registrarUsuario = async (req, res, next) => {
   try {
-    const { nombre, email, password, rol } = req.body;
+    const nombre = texto(req.body.nombre);
+    const email = texto(req.body.email).toLowerCase();
+    const password = typeof req.body.password === "string" ? req.body.password : "";
+    const { rol } = req.body;
 
-    // 1. Verificar si el email ya existe en alguna de las 3 colecciones
-    const [existePaciente, existeKinesio, existeAdmin] = await Promise.all([
-      Paciente.findOne({ email }),
-      Kinesio.findOne({ email }),
-      Admin.findOne({ email })
-    ]);
-
-    if (existePaciente || existeKinesio || existeAdmin) {
-      return res.status(400).json({ mensaje: "El correo ya está registrado en la plataforma." });
+    if (!nombre || !email || !password) {
+      return res.status(400).json({ mensaje: "Nombre, email y contraseña son obligatorios." });
     }
 
-    // 2. Determinar en qué colección guardar según el rol
-    let nuevoUsuario;
+    if (password.length < 6) {
+      return res.status(400).json({ mensaje: "La contraseña debe tener al menos 6 caracteres." });
+    }
 
-    if (rol === "paciente") {
-      nuevoUsuario = new Paciente({ nombre, email, password, rol });
-    } else if (rol === "kinesio") {
-      nuevoUsuario = new Kinesio({ nombre, email, password, rol });
-    } else if (rol === "admin") {
-      nuevoUsuario = new Admin({ nombre, email, password, rol });
-    } else {
+    if (typeof rol !== "string" || !Object.hasOwn(modelosPorRol, rol)) {
       return res.status(400).json({ mensaje: "El rol especificado no es válido." });
     }
 
-    // 3. Guardar en la base de datos
-    await nuevoUsuario.save();
+    if (await emailEnUso(email)) {
+      return res.status(400).json({ mensaje: "El correo ya está registrado en la plataforma." });
+    }
+
+    const Modelo = modelosPorRol[rol];
+    await new Modelo({ nombre, email, password, rol }).save();
 
     return res.status(201).json({
       mensaje: `Usuario registrado con éxito como ${rol}`
     });
-
   } catch (error) {
     next(error);
   }
 };
 
-// Iniciar Sesión (POST /api/auth/login)
 const iniciarSesion = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const email = texto(req.body.email).toLowerCase();
+    const password = typeof req.body.password === "string" ? req.body.password : "";
 
-    // Buscar el usuario en las 3 colecciones
-    let usuario = await Paciente.findOne({ email }) || 
-                  await Kinesio.findOne({ email }) || 
-                  await Admin.findOne({ email });
+    if (!email || !password) {
+      return res.status(400).json({ mensaje: "Email y contraseña son obligatorios." });
+    }
+
+    const usuario = (await Paciente.findOne({ email })) ||
+                    (await Kinesio.findOne({ email })) ||
+                    (await Admin.findOne({ email }));
 
     if (!usuario || !(await usuario.validarPassword(password))) {
       return res.status(401).json({ mensaje: "Credenciales inválidas" });
@@ -64,7 +59,6 @@ const iniciarSesion = async (req, res, next) => {
       throw new Error("JWT_SECRET no está definida en las variables de entorno.");
     }
 
-    // Generar Token JWT
     const token = jwt.sign(
       { id: usuario._id, rol: usuario.rol },
       process.env.JWT_SECRET,

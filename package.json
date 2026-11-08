@@ -1,28 +1,21 @@
 {
   "name": "kinevida",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "api": "node --env-file=.env servidor/index.js"
+    "dev": "node --env-file=.env --watch servidor/index.js",
+    "start": "node servidor/index.js",
+    "crear-admin": "node --env-file=.env servidor/scripts/crearAdmin.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.6",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.0.0",
-    "next": "^14.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "devDependencies": {
-    "autoprefixer": "^10.6.2",
-    "postcss": "^8.5.32",
-    "tailwindcss": "^3.4.19"
+    "mongoose": "^8.0.0"
   }
 }

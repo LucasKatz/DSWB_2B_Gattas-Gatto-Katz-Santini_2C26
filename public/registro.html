@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registrar usuario · KineVida</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <main id="contenido" class="centrado" hidden>
+    <div class="tarjeta">
+      <h1>Registrar usuario</h1>
+      <p class="subtitulo">Solo administradores</p>
+
+      <div id="alerta" class="alerta" role="alert" hidden></div>
+
+      <form id="formulario">
+        <div class="campo">
+          <label for="nombre">Nombre completo</label>
+          <input id="nombre" name="nombre" type="text" autocomplete="off" required>
+        </div>
+        <div class="campo">
+          <label for="email">Correo electrónico</label>
+          <input id="email" name="email" type="email" autocomplete="off" required>
+        </div>
+        <div class="campo">
+          <label for="password">Contraseña (mínimo 6 caracteres)</label>
+          <input id="password" name="password" type="password" minlength="6" autocomplete="new-password" required>
+        </div>
+        <div class="campo">
+          <label for="rol">Rol</label>
+          <select id="rol" name="rol" required>
+            <option value="paciente">Paciente</option>
+            <option value="kinesio">Kinesiólogo</option>
+            <option value="admin">Administrador</option>
+          </select>
+        </div>
+        <button id="boton" class="boton boton-completo" type="submit">Registrar usuario</button>
+      </form>
+
+      <p class="pie"><a href="/dashboard">Volver al panel</a></p>
+    </div>
+  </main>
+  <script type="module" src="/js/registro.js"></script>
+</body>
+</html>

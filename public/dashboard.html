@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel · KineVida</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+  <div id="contenido" hidden>
+    <header class="barra">
+      <h1>KineVida · Panel</h1>
+      <div class="barra-acciones">
+        <a id="enlace-registro" class="boton boton-secundario" href="/registro" hidden>Registrar usuario</a>
+        <button id="salir" class="boton boton-secundario" type="button">Cerrar sesión</button>
+      </div>
+    </header>
+
+    <main class="contenedor">
+      <h2 id="saludo"></h2>
+      <p class="subtitulo">Resumen de pacientes y kinesiólogos registrados</p>
+
+      <div id="alerta" class="alerta alerta-error" role="alert" hidden></div>
+
+      <div class="columnas">
+        <section class="panel">
+          <h3>Pacientes <span id="contador-pacientes" class="contador">0</span></h3>
+          <div id="lista-pacientes"></div>
+        </section>
+        <section class="panel">
+          <h3>Kinesiólogos <span id="contador-kinesios" class="contador">0</span></h3>
+          <div id="lista-kinesios"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script type="module" src="/js/dashboard.js"></script>
+</body>
+</html>

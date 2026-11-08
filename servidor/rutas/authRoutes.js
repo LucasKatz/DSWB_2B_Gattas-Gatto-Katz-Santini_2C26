@@ -1,11 +1,10 @@
 import express from "express";
-const router = express.Router();
 import { iniciarSesion, registrarUsuario } from "../controladores/authControlador.js";
+import { verificarToken, soloAdmin } from "../middlewares/authMiddelware.js";
 
-// Ruta de API para registrar usuarios (POST http://localhost:3000/api/auth/registro)
-router.post("/registro", registrarUsuario);
+const router = express.Router();
 
-// Ruta de API para login (POST http://localhost:3000/api/auth/login)
+router.post("/registro", verificarToken, soloAdmin, registrarUsuario);
 router.post("/login", iniciarSesion);
 
 export default router;

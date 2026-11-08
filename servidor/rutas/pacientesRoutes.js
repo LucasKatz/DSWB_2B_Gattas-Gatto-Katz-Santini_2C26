@@ -1,29 +1,16 @@
 import express from "express";
+import { verificarToken, permitirRoles, soloAdmin } from "../middlewares/authMiddelware.js";
+import { obtenerTodos, obtenerPorId, crear, actualizar, eliminar } from "../controladores/pacientesControlador.js";
 
 const router = express.Router();
+const lectura = permitirRoles("admin", "kinesio");
 
-import {
+router.use(verificarToken);
 
-    obtenerPacientes,
-    obtenerPacientePorId,
-    crearPaciente,
-    actualizarPaciente,
-    eliminarPaciente
-
-} from "../controladores/pacientesControlador.js";
-
-
-// rutas CRUD
-
-router.get("/", obtenerPacientes);
-
-router.get("/:id", obtenerPacientePorId);
-
-router.post("/", crearPaciente);
-
-router.put("/:id", actualizarPaciente);
-
-router.delete("/:id", eliminarPaciente);
-
+router.get("/", lectura, obtenerTodos);
+router.get("/:id", lectura, obtenerPorId);
+router.post("/", soloAdmin, crear);
+router.put("/:id", soloAdmin, actualizar);
+router.delete("/:id", soloAdmin, eliminar);
 
 export default router;
